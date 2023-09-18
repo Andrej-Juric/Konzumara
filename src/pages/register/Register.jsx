@@ -66,7 +66,7 @@ confirmPassword: yup
     <Auth>
     {({ user, signIn, signOut, signUp }) => (
       <div>
-        {/* Ovdje možete koristiti user da biste provjerili je li korisnik prijavljen */}
+        
         {user ? (
           <div>
             <p>Prijavljeni ste kao: {user.email}</p>
@@ -74,7 +74,7 @@ confirmPassword: yup
           </div>
         ) : (
           <div>
-            {/* Vaša postojeća forma za registraciju */}
+            
             <Paper radius="md" p="xl">
               <Text size="lg" weight={500}>
                 Welcome to Lidlara, {type} with
