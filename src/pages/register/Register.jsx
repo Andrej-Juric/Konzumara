@@ -35,6 +35,7 @@ export default function Register() {
       .min(6)
       .required()
       .oneOf([yup.ref("password"), null], "Passwords must match"),
+    is_admin: yup.boolean(),
   });
 
   const form = useForm({
@@ -73,16 +74,16 @@ export default function Register() {
                       if (type === "register") {
                         await signUp(
                           form.values.email,
+                          form.values.full_name,
                           form.values.password,
                           form.values.confirmPassword,
-                          form.values.full_name,
                           form.values.is_admin
                         );
                       } else {
                         await signIn(form.values.email, form.values.password);
                       }
                     } catch (error) {
-                      console.error("Error:", error);
+                      console.error(error);
                     }
                   }}
                 >

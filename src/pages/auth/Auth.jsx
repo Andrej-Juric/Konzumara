@@ -4,6 +4,8 @@ import { supabase } from "../config/supabase";
 export default function Auth({ children }) {
   const [user, setUser] = useState(null);
 
+  console.log(user);
+
   const signIn = async (email, password) => {
     const { user, error } = await supabase.auth.signInWithPassword({
       email,
@@ -20,15 +22,27 @@ export default function Auth({ children }) {
     setUser(null);
   };
 
-  const signUp = async (email, password, is_admin, full_name) => {
+  const signUp = async (
+    email,
+    full_name,
+    password,
+    confirmPassword,
+    is_admin
+  ) => {
+    console.log("slanje zahtjeva");
     const { user, error } = await supabase.auth.signUp({
       email,
+      full_name,
       password,
-      options: {
-        full_name,
-        is_admin,
-      },
+      confirmPassword,
+      is_admin,
     });
+    console.log(email);
+    console.log(full_name);
+    console.log(password);
+    console.log(confirmPassword);
+    console.log(is_admin);
+    console.log("odgovor na reg:", user, error);
     if (error) {
       throw new Error(error.message);
     }
