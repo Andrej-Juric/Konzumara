@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { supabase } from "../config/supabase";
+
+// context
+export const AuthContext = createContext();
 
 export default function Auth({ children }) {
   const [user, setUser] = useState(null);
@@ -7,13 +10,14 @@ export default function Auth({ children }) {
   console.log(user);
 
   const signIn = async (email, password) => {
-    const { user, error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
     if (error) {
       throw new Error(error.message);
     }
+
     setUser(user);
   };
 
@@ -22,31 +26,38 @@ export default function Auth({ children }) {
     setUser(null);
   };
 
-  const signUp = async (
-    email,
-    full_name,
-    password,
-    confirmPassword,
-    is_admin
-  ) => {
+  const signUp = async (email, password, full_name, is_admin) => {
     console.log("slanje zahtjeva");
-    const { user, error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
-      full_name,
       password,
-      confirmPassword,
-      is_admin,
+      options: {
+        data: {
+          full_name,
+        },
+      },
     });
+    await supabase
+      .from("profiles")
+      .update({
+        is_admin,
+      })
+      .eq("id", data.user.id);
     console.log(email);
-    console.log(full_name);
     console.log(password);
-    console.log(confirmPassword);
+    console.log(full_name);
+
     console.log(is_admin);
-    console.log("odgovor na reg:", user, error);
+    console.log("odgovor na reg:", data, error);
     if (error) {
-      throw new Error(error.message);
+      throw new Error("Greška", error.message);
     }
     setUser(user);
   };
-  return children({ user, signIn, signOut, signUp });
+  // return children({ user, signIn, signOut, signUp });
+  return (
+    <AuthContext.Provider value={{ user, signIn, signOut, signUp }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
