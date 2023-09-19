@@ -6,6 +6,7 @@ export const AuthContext = createContext();
 
 export default function Auth({ children }) {
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   console.log(user);
 
@@ -34,6 +35,7 @@ export default function Auth({ children }) {
       options: {
         data: {
           full_name,
+          role: is_admin ? "admin" : "user",
         },
       },
     });
@@ -46,7 +48,6 @@ export default function Auth({ children }) {
     console.log(email);
     console.log(password);
     console.log(full_name);
-
     console.log(is_admin);
     console.log("odgovor na reg:", data, error);
     if (error) {
@@ -54,7 +55,26 @@ export default function Auth({ children }) {
     }
     setUser(user);
   };
-  // return children({ user, signIn, signOut, signUp });
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      if (data && data.session) {
+        setUser(data.session.user);
+        console.log(data.session.user);
+        setIsLoading(false);
+      } else {
+        setIsLoading(false);
+      }
+    });
+    supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN") {
+        setUser(session.user);
+        setIsLoading(false);
+      }
+      if (event === "SIGNED_OUT") {
+        setUser(null);
+      }
+    });
+  }, []);
   return (
     <AuthContext.Provider value={{ user, signIn, signOut, signUp }}>
       {children}

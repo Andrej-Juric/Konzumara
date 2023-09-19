@@ -17,10 +17,13 @@ import {
   Stack,
 } from "@mantine/core";
 import { useContext, useState } from "react";
+import UserScreen from "../homepage/Homepage";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [type, toggle] = useToggle(["login", "register"]);
   const { user, signIn, signOut, signUp } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const registrationSchema = yup.object().shape({
     email: yup.string().email().required(),
@@ -79,8 +82,10 @@ export default function Register() {
                         // form.values.confirmPassword,
                         form.values.is_admin
                       );
+                      navigate("/homepage");
                     } else {
                       await signIn(form.values.email, form.values.password);
+                      navigate("/homepage");
                     }
                   } catch (error) {
                     console.error(error);

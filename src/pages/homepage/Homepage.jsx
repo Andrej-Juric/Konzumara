@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   AppShell,
   Header,
@@ -13,10 +13,26 @@ import {
 } from "@mantine/core";
 import { FeaturesCard } from "./Cards";
 import { products } from "./json";
+import { AuthContext } from "../auth/Auth";
+import { useNavigate } from "react-router-dom";
 
 export default function UserScreen() {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
+  const { user, signIn, signOut, signUp } = useContext(AuthContext);
+
+  const navigate = useNavigate();
+  const handleLoginClick = () => {
+    navigate("/register");
+  };
+
+  const handleRegisterClick = () => {
+    navigate("/register");
+  };
+
+  const handleAdminClick = () => {
+    navigate("/admin");
+  };
   return (
     <AppShell
       styles={{
@@ -62,12 +78,25 @@ export default function UserScreen() {
                 src="https://img.icons8.com/color/48/duolingo-logo.png"
                 alt="duolingo-logo"
               />
+              <Button onClick={handleAdminClick}>Admin</Button>
             </div>
             <div style={{ display: "flex", alignItems: "center" }}>
-              <Button style={{ marginRight: 10 }} color="green">
-                Login
+              {user ? (
+                <Button onClick={signOut}>Log Out</Button>
+              ) : (
+                <Button
+                  onClick={handleLoginClick}
+                  style={{ marginRight: 10 }}
+                  color="green"
+                >
+                  Login
+                </Button>
+              )}
+
+              <Button onClick={handleRegisterClick} variant="outline">
+                Register
               </Button>
-              <Button variant="outline">Register</Button>
+
               <img
                 width="48"
                 height="48"

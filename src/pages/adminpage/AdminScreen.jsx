@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   AppShell,
   Navbar,
@@ -12,10 +12,19 @@ import {
 } from "@mantine/core";
 import ProductsTable from "./products-table";
 import { products } from "../homepage/json";
+import { AuthContext } from "../auth/Auth";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminPage() {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
+  const { user, signIn, signOut, signUp } = useContext(AuthContext);
+
+  const navigate = useNavigate();
+  const handleUserScreen = () => {
+    navigate("/homepage");
+  };
+
   return (
     <AppShell
       styles={{
@@ -67,6 +76,8 @@ export default function AdminPage() {
             </MediaQuery>
 
             <Text>Admin page</Text>
+            <Button onClick={handleUserScreen}>User Screen</Button>
+            <Button onClick={signOut}>Log Out</Button>
           </div>
         </Header>
       }
