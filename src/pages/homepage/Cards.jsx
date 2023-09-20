@@ -64,10 +64,10 @@ export function FeaturesCard({ product }) {
 
       <Group position="apart" mt="md">
         <div>
-          <Text fw={500}>{product?.name}</Text>
+          <Text fw={500}>{product?.title}</Text>
         </div>
         <Badge color="red" variant="outline">
-          25% off
+          {product.sale_price}
         </Badge>
       </Group>
 

@@ -15,6 +15,7 @@ import { FeaturesCard } from "./Cards";
 import { products } from "./json";
 import { AuthContext } from "../auth/Auth";
 import { useNavigate } from "react-router-dom";
+import SupaProducts from "../fetch-data/SupaProducts";
 
 export default function UserScreen() {
   const theme = useMantineTheme();
@@ -33,6 +34,7 @@ export default function UserScreen() {
   const handleAdminClick = () => {
     navigate("/admin");
   };
+
   return (
     <AppShell
       styles={{
@@ -133,14 +135,7 @@ export default function UserScreen() {
         />
       </div>
       <Text>Our products</Text>
-
-      <Grid>
-        {products.map((product) => (
-          <Grid.Col key={product.id} sm={6} md={4} lg={3}>
-            <FeaturesCard product={product} />
-          </Grid.Col>
-        ))}
-      </Grid>
+      <SupaProducts />
       <div style={{ textAlign: "center", marginTop: "20px" }}>
         <Button className="show-more" color="yellow" radius="md" size="md">
           Show more products

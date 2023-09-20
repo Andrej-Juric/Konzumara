@@ -11,11 +11,15 @@ import {
   Button,
 } from "@mantine/core";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
-// import { products } from "../../homepage/json";
+import { useNavigate } from "react-router-dom";
 
 export default function ProductsTable({ products }) {
   const theme = useMantineTheme();
   const data = products?.map((product) => product.name);
+  const navigate = useNavigate();
+  const handleShoppingCart = () => {
+    navigate("/shoppingcart");
+  };
 
   const allProducts = products.map((product) => (
     <tr key={product.name}>
@@ -56,12 +60,10 @@ export default function ProductsTable({ products }) {
           label="List of our products"
           placeholder="Search ..."
           searchable
-          // searchValue={searchValue}
-          // onSearchChange={onSearchChange}
           nothingFound="Nothing found"
         />
 
-        <Button>Add new product</Button>
+        <Button onClick={handleShoppingCart}>Add new product</Button>
       </div>
       <Table sx={{ minWidth: 800 }} verticalSpacing="sm">
         <thead>

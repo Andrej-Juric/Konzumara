@@ -10,10 +10,11 @@ import {
   useMantineTheme,
   Button,
 } from "@mantine/core";
-import ProductsTable from "./products-table";
-import { products } from "../homepage/json";
+import ProductsTable from "./products-table/ProductTable";
 import { AuthContext } from "../auth/Auth";
 import { useNavigate } from "react-router-dom";
+import SupaProducts from "../fetch-data/SupaProducts";
+import { products } from "../homepage/json";
 
 export default function AdminPage() {
   const theme = useMantineTheme();
@@ -82,7 +83,8 @@ export default function AdminPage() {
         </Header>
       }
     >
-      <ProductsTable products={products} />
+      {/* <ProductsTable products={products} /> */}
+      <SupaProducts />
     </AppShell>
   );
 }
