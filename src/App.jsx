@@ -6,7 +6,8 @@ import Register from "./pages/register/Register";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./pages/auth/Auth";
-import Cart from "./pages/create-product/CreateProduct";
+import CreateProduct from "./pages/create-product/CreateProduct";
+import EditProduct from "./pages/edit-product/EditProduct";
 
 export default function App() {
   const { user, signIn, signOut, signUp } = useContext(AuthContext);
@@ -18,7 +19,8 @@ export default function App() {
         <Route path="homepage" element={<UserScreen />} />
         <Route path="register" element={<Register />} />
         <Route path="admin" element={<AdminPage />} />
-        <Route path="shoppingcart" element={<Cart />} />
+        <Route path="create" element={<CreateProduct />} />
+        <Route path="edit/:productId" element={<EditProduct />} />
       </Routes>
     </MantineProvider>
   );

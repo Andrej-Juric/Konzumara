@@ -11,23 +11,46 @@ import {
   Button,
 } from "@mantine/core";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../config/supabase";
 
-export default function ProductsTable({ products }) {
+export default function ProductsTable({}) {
   const theme = useMantineTheme();
-  const data = products?.map((product) => product.name);
+  const [products, setProducts] = useState(null);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const handleShoppingCart = () => {
-    navigate("/shoppingcart");
+  const handleCreateProduct = () => {
+    navigate("/create");
+  };
+  const handleEditProduct = (productId) => {
+    navigate(`/edit/${productId}`);
   };
 
-  const allProducts = products.map((product) => (
-    <tr key={product.name}>
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data, error } = await supabase.from("products").select();
+
+      if (error) {
+        setError("Ne fetcham");
+        setProducts(null);
+        console.log(error);
+      }
+      if (data) {
+        setProducts(data);
+        console.log(data);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const allProducts = products?.map((product) => (
+    <tr key={product.id}>
       <td>
         <Group spacing="sm">
           <Avatar size={30} src={product.avatar} radius={30} />
           <Text fz="sm" fw={500}>
-            {product.name}
+            {product.title}
           </Text>
         </Group>
       </td>
@@ -41,7 +64,11 @@ export default function ProductsTable({ products }) {
       <td>
         <Group spacing={0} position="left">
           <ActionIcon>
-            <IconPencil size="1rem" stroke={1.5} />
+            <IconPencil
+              onClick={() => handleEditProduct(product.id)}
+              size="1rem"
+              stroke={1.5}
+            />
           </ActionIcon>
           <ActionIcon color="red">
             <IconTrash size="1rem" stroke={1.5} />
@@ -54,16 +81,8 @@ export default function ProductsTable({ products }) {
   return (
     <ScrollArea>
       <div>
-        <MultiSelect
-          style={{ width: "150px" }}
-          data={data}
-          label="List of our products"
-          placeholder="Search ..."
-          searchable
-          nothingFound="Nothing found"
-        />
-
-        <Button onClick={handleShoppingCart}>Add new product</Button>
+        <Button onClick={handleCreateProduct}>Add new product</Button>
+        {/* <Button onClick={handleEditProduct}>Edit</Button> */}
       </div>
       <Table sx={{ minWidth: 800 }} verticalSpacing="sm">
         <thead>
