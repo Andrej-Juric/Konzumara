@@ -3,14 +3,21 @@ import { AuthContext } from "../auth/Auth";
 import { useForm } from "@mantine/form";
 import { Box, Button, Checkbox, NumberInput, TextInput } from "@mantine/core";
 import { supabase } from "../config/supabase";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 export default function EditProduct() {
   const { user } = useContext(AuthContext);
   const [products, setProducts] = useState(null);
   const { productId } = useParams();
+  const navigate = useNavigate();
+
   console.log(products);
+  console.log(productId);
   // console.log(products[0].title);
+
+  const handleCancel = () => {
+    navigate("/admin");
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -113,6 +120,7 @@ export default function EditProduct() {
         <Button onClick={editProduct} type="submit" mt="md">
           Submit
         </Button>
+        <Button onClick={handleCancel}>Cancel</Button>
       </form>
     </Box>
   );

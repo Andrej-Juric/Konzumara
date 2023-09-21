@@ -3,9 +3,14 @@ import { Box, Button, Checkbox, NumberInput, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "../auth/Auth";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateProduct() {
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const handleCancel = () => {
+    navigate("/admin");
+  };
 
   const form = useForm({
     initialValues: {
@@ -76,6 +81,7 @@ export default function CreateProduct() {
         <Button onClick={addProduct} type="submit" mt="md">
           Submit
         </Button>
+        <Button onClick={handleCancel}>Cancel</Button>
       </form>
     </Box>
   );

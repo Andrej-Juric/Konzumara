@@ -12,7 +12,7 @@ import {
 } from "@mantine/core";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../config/supabase";
 
 export default function ProductsTable({}) {
@@ -20,11 +20,18 @@ export default function ProductsTable({}) {
   const [products, setProducts] = useState(null);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { productId } = useParams();
   const handleCreateProduct = () => {
     navigate("/create");
   };
   const handleEditProduct = (productId) => {
     navigate(`/edit/${productId}`);
+  };
+  const handleDelete = async () => {
+    const { data, error } = await supabase
+      .from("products")
+      .delete()
+      .eq("id", productId);
   };
 
   useEffect(() => {
@@ -71,7 +78,11 @@ export default function ProductsTable({}) {
             />
           </ActionIcon>
           <ActionIcon color="red">
-            <IconTrash size="1rem" stroke={1.5} />
+            <IconTrash
+              onClick={() => handleDelete(product.id)}
+              size="1rem"
+              stroke={1.5}
+            />
           </ActionIcon>
         </Group>
       </td>
