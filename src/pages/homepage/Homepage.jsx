@@ -8,11 +8,8 @@ import {
   Burger,
   useMantineTheme,
   Button,
-  Grid,
   Select,
 } from "@mantine/core";
-import { FeaturesCard } from "./Cards";
-import { products } from "./json";
 import { AuthContext } from "../auth/Auth";
 import { useNavigate } from "react-router-dom";
 import SupaProducts from "../fetch-data/SupaProducts";
@@ -20,7 +17,7 @@ import SupaProducts from "../fetch-data/SupaProducts";
 export default function UserScreen() {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
-  const { user, signIn, signOut, signUp } = useContext(AuthContext);
+  const { user, signOut, signIn, signUp } = useContext(AuthContext);
 
   const navigate = useNavigate();
   const handleLoginClick = () => {
@@ -94,10 +91,11 @@ export default function UserScreen() {
                   Login
                 </Button>
               )}
-
-              <Button onClick={handleRegisterClick} variant="outline">
-                Register
-              </Button>
+              {user ? null : (
+                <Button onClick={handleRegisterClick} variant="outline">
+                  Register
+                </Button>
+              )}
 
               <img
                 width="48"
@@ -118,7 +116,7 @@ export default function UserScreen() {
           marginTop: "20px",
         }}
       >
-        <Select
+        {/* <Select
           data={[
             "Price lowest",
             "Price highest",
@@ -132,15 +130,15 @@ export default function UserScreen() {
           radius="xl"
           size="xs"
           style={{ width: "120px", marginLeft: "auto" }}
-        />
+        /> */}
       </div>
       <Text>Our products</Text>
       <SupaProducts />
-      <div style={{ textAlign: "center", marginTop: "20px" }}>
+      {/* <div style={{ textAlign: "center", marginTop: "20px" }}>
         <Button className="show-more" color="yellow" radius="md" size="md">
           Show more products
         </Button>
-      </div>
+      </div> */}
     </AppShell>
   );
 }

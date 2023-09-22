@@ -13,8 +13,6 @@ import {
 import ProductsTable from "./ProductTable";
 import { AuthContext } from "../auth/Auth";
 import { useNavigate } from "react-router-dom";
-import SupaProducts from "../fetch-data/SupaProducts";
-import { products } from "../homepage/json";
 
 export default function AdminPage() {
   const theme = useMantineTheme();

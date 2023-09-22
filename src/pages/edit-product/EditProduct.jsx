@@ -13,7 +13,6 @@ export default function EditProduct() {
 
   console.log(products);
   console.log(productId);
-  // console.log(products[0].title);
 
   const handleCancel = () => {
     navigate("/admin");
@@ -64,7 +63,6 @@ export default function EditProduct() {
       });
     }
   }, [user, products]);
-  // console.log("User ID:", user.id);
 
   const handleSubmit = (e) => {
     e.preventDefault();

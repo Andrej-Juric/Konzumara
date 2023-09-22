@@ -7,7 +7,6 @@ import {
   ScrollArea,
   useMantineTheme,
   Badge,
-  MultiSelect,
   Button,
 } from "@mantine/core";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
@@ -27,7 +26,7 @@ export default function ProductsTable({}) {
   const handleEditProduct = (productId) => {
     navigate(`/edit/${productId}`);
   };
-  const handleDelete = async () => {
+  const handleDelete = async (productId) => {
     const { data, error } = await supabase
       .from("products")
       .delete()
@@ -93,7 +92,6 @@ export default function ProductsTable({}) {
     <ScrollArea>
       <div>
         <Button onClick={handleCreateProduct}>Add new product</Button>
-        {/* <Button onClick={handleEditProduct}>Edit</Button> */}
       </div>
       <Table sx={{ minWidth: 800 }} verticalSpacing="sm">
         <thead>

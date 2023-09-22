@@ -66,17 +66,31 @@ export function FeaturesCard({ product }) {
         <div>
           <Text fw={500}>{product?.title}</Text>
         </div>
-        <Badge color="red" variant="outline">
-          {product.sale_price}
-        </Badge>
+        {product.is_sale ? (
+          <Badge color="red" variant="outline">
+            On SALE PRICE {product.sale_price} €
+          </Badge>
+        ) : null}
       </Group>
 
       <Card.Section className={classes.section}>
         <Group spacing={30}>
           <div>
-            <Text fz="xl" fw={700} sx={{ lineHeight: 1 }}>
-              {product.price} €
-            </Text>
+            {product.is_sale ? (
+              <Text
+                style={{ textDecoration: "line-through", color: "red" }}
+                fz="xl"
+                fw={700}
+                sx={{ lineHeight: 1 }}
+              >
+                {product.price} €
+              </Text>
+            ) : (
+              <Text fz="xl" fw={700} sx={{ lineHeight: 1 }}>
+                {product.price} €
+              </Text>
+            )}
+
             <Text fz="sm" c="dimmed" fw={500} sx={{ lineHeight: 1 }} mt={3}>
               Price
             </Text>

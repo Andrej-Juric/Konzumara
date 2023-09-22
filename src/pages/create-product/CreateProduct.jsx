@@ -28,7 +28,6 @@ export default function CreateProduct() {
       form.setValues({ ...form.values, user_id: user.id });
     }
   }, [user]);
-  // console.log("User ID:", user.id);
 
   const handleSubmit = (e) => {
     e.preventDefault();
