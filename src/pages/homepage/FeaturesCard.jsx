@@ -78,9 +78,9 @@ export function FeaturesCard({ product }) {
           <div>
             {product.is_sale ? (
               <Text
-                style={{ textDecoration: "line-through", color: "red" }}
+                c={"red"}
+                td={"line-through"}
                 fz="xl"
-                fw={700}
                 sx={{ lineHeight: 1 }}
               >
                 {product.price} €

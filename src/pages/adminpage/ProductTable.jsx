@@ -12,7 +12,7 @@ import {
 import { IconPencil, IconTrash } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { supabase } from "../config/supabase";
+import { supabase } from "../../config/supabase";
 
 export default function ProductsTable({}) {
   const theme = useMantineTheme();
@@ -62,9 +62,26 @@ export default function ProductsTable({}) {
       </td>
 
       <td>
-        <Badge variant={theme.colorScheme === "dark" ? "light" : "outline"}>
-          {product.price}
-        </Badge>
+        {product.is_sale ? (
+          <Badge
+            c={"red"}
+            td={"line-through"}
+            variant={theme.colorScheme === "dark" ? "light" : "outline"}
+          >
+            {product.price}
+          </Badge>
+        ) : (
+          <Badge variant={theme.colorScheme === "dark" ? "light" : "outline"}>
+            {product.price}
+          </Badge>
+        )}
+      </td>
+      <td>
+        {product.is_sale ? (
+          <Badge color={"red"} variant={"outline"}>
+            {product.sale_price}
+          </Badge>
+        ) : null}
       </td>
 
       <td>
@@ -98,6 +115,7 @@ export default function ProductsTable({}) {
           <tr>
             <th>Products name</th>
             <th>Price</th>
+            <th>Sale Price</th>
             <th>Edit | Delete</th>
           </tr>
         </thead>

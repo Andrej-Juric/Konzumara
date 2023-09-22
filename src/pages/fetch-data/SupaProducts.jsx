@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../config/supabase";
+import { supabase } from "../../config/supabase";
 import { Button, Grid } from "@mantine/core";
-import { FeaturesCard } from "../homepage/Cards";
+import { FeaturesCard } from "../homepage/FeaturesCard";
 export default function SupaProducts({}) {
   const [products, setProducts] = useState(null);
   const [error, setError] = useState(null);
   const [orderBy, setOrderBy] = useState("created_at");
-  const [orderAscending, setOrderAscending] = useState(true);
-  const [productRange, setProductRange] = useState(8);
+  // const [orderAscending, setOrderAscending] = useState(true);
+  const [productRange, setProductRange] = useState(7);
+  console.log(productRange);
   console.log(products);
 
   useEffect(() => {
@@ -15,8 +16,8 @@ export default function SupaProducts({}) {
       const { data, error } = await supabase
         .from("products")
         .select()
-        .limit(productRange)
-        .order(orderBy, { ascending: orderAscending });
+        .range(0, productRange)
+        .order(orderBy, { ascending: true });
 
       if (error) {
         setError("Ne fetcham");
@@ -29,14 +30,16 @@ export default function SupaProducts({}) {
       }
     };
     fetchData();
-  }, [orderBy, orderAscending, productRange]);
+  }, [orderBy, productRange]);
 
-  const toggleOrder = () => {
-    setOrderAscending(!orderAscending);
-  };
+  // const toggleOrder = () => {
+  //   setOrderAscending(!orderAscending);
+  // };
 
   const handleShowMoreProducts = () => {
-    setProductRange(productRange + 4);
+    if (products.length > productRange) {
+      setProductRange(productRange + 8);
+    }
   };
 
   return (
@@ -63,9 +66,9 @@ export default function SupaProducts({}) {
           <Button onClick={() => setOrderBy("title")}>Title</Button>
           <Button onClick={() => setOrderBy("created_at")}>Created at</Button>
           <Button onClick={() => setOrderBy("price")}>Price</Button>
-          <Button onClick={toggleOrder}>
+          {/* <Button onClick={toggleOrder}>
             {orderAscending ? "Sort Ascending" : "Sort Descending"}
-          </Button>
+          </Button> */}
           <Grid>
             {products &&
               products.map((product) => (

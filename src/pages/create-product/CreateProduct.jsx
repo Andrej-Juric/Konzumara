@@ -1,4 +1,4 @@
-import { supabase } from "../config/supabase";
+import { supabase } from "../../config/supabase";
 import { Box, Button, Checkbox, NumberInput, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useContext, useEffect } from "react";

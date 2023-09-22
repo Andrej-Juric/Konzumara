@@ -77,7 +77,7 @@ export default function UserScreen() {
                 src="https://img.icons8.com/color/48/duolingo-logo.png"
                 alt="duolingo-logo"
               />
-              <Button onClick={handleAdminClick}>Admin</Button>
+              {user ? <Button onClick={handleAdminClick}>Admin</Button> : null}
             </div>
             <div style={{ display: "flex", alignItems: "center" }}>
               {user ? (
