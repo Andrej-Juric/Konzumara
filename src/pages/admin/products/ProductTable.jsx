@@ -12,19 +12,22 @@ import {
 import { IconPencil, IconTrash } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { supabase } from "../../config/supabase";
+import { supabase } from "../../../config/supabase";
+import { modals } from "@mantine/modals";
 
 export default function ProductsTable({}) {
   const theme = useMantineTheme();
   const [products, setProducts] = useState(null);
   const [error, setError] = useState(null);
+  const [activePage, setPage] = useState(1);
   const navigate = useNavigate();
   const { productId } = useParams();
+
   const handleCreateProduct = () => {
-    navigate("/create");
+    navigate("/admin/create");
   };
   const handleEditProduct = (productId) => {
-    navigate(`/edit/${productId}`);
+    navigate(`/admin/edit/${productId}`);
   };
   const handleDelete = async (productId) => {
     const { data, error } = await supabase
@@ -32,6 +35,26 @@ export default function ProductsTable({}) {
       .delete()
       .eq("id", productId);
   };
+
+  // delete modal
+
+  const openDeleteModal = (productId) =>
+    modals.openConfirmModal({
+      title: "Delete your product",
+      centered: true,
+      children: (
+        <Text size="sm">
+          Are you sure you want to delete this product? This action is
+          destructive and you will have to contact support to restore your data.
+        </Text>
+      ),
+      labels: { confirm: "Delete product", cancel: "No don't delete it" },
+      confirmProps: { color: "red" },
+      onCancel: () => console.log("Cancel"),
+      onConfirm: () => handleDelete(productId),
+    });
+
+  //
 
   useEffect(() => {
     const fetchData = async () => {
@@ -95,7 +118,8 @@ export default function ProductsTable({}) {
           </ActionIcon>
           <ActionIcon color="red">
             <IconTrash
-              onClick={() => handleDelete(product.id)}
+              // onClick={() => openDeleteModal(product.id)}
+              onClick={() => openDeleteModal(product.id)}
               size="1rem"
               stroke={1.5}
             />
