@@ -1,7 +1,7 @@
 import { useToggle, upperFirst } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
-import Auth from "../auth/Auth";
-import { AuthContext } from "../auth/Auth";
+import Auth from "../../contexts/Auth";
+import { AuthContext } from "../../contexts/Auth";
 
 import * as yup from "yup";
 import {
@@ -17,7 +17,7 @@ import {
   Stack,
 } from "@mantine/core";
 import { useContext, useState } from "react";
-import UserScreen from "../homepage/Homepage";
+import UserScreen from "../home/Home";
 import { useNavigate } from "react-router-dom";
 
 export default function Register() {

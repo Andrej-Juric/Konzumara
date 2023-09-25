@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../auth/Auth";
+import { AuthContext } from "../../../contexts/Auth";
 import { useForm } from "@mantine/form";
 import { Box, Button, Checkbox, NumberInput, TextInput } from "@mantine/core";
-import { supabase } from "../../config/supabase";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { supabase } from "../../../config/supabase";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function EditProduct() {
   const { user } = useContext(AuthContext);

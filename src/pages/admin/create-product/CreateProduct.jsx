@@ -1,8 +1,8 @@
-import { supabase } from "../../config/supabase";
+import { supabase } from "../../../config/supabase";
 import { Box, Button, Checkbox, NumberInput, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useContext, useEffect } from "react";
-import { AuthContext } from "../auth/Auth";
+import { AuthContext } from "../../../contexts/Auth";
 import { useNavigate } from "react-router-dom";
 
 export default function CreateProduct() {

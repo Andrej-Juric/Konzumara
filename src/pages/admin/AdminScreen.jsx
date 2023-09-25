@@ -21,7 +21,7 @@ export default function AdminPage() {
 
   const navigate = useNavigate();
   const handleUserScreen = () => {
-    navigate("/homepage");
+    navigate("/");
   };
 
   return (

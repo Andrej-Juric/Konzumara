@@ -10,9 +10,9 @@ import {
   Button,
   Select,
 } from "@mantine/core";
-import { AuthContext } from "../auth/Auth";
+import { AuthContext } from "../../contexts/Auth";
 import { useNavigate } from "react-router-dom";
-import SupaProducts from "../fetch-data/SupaProducts";
+import SupaProducts from "../api/SupaProducts";
 
 export default function UserScreen() {
   const theme = useMantineTheme();
@@ -115,30 +115,9 @@ export default function UserScreen() {
           alignItems: "center",
           marginTop: "20px",
         }}
-      >
-        {/* <Select
-          data={[
-            "Price lowest",
-            "Price highest",
-            "Ascending A-Z",
-            "Descending Z-A",
-            "Newest",
-            "Oldest",
-          ]}
-          placeholder="Sort by"
-          label="Sort by"
-          radius="xl"
-          size="xs"
-          style={{ width: "120px", marginLeft: "auto" }}
-        /> */}
-      </div>
+      ></div>
       <Text>Our products</Text>
       <SupaProducts />
-      {/* <div style={{ textAlign: "center", marginTop: "20px" }}>
-        <Button className="show-more" color="yellow" radius="md" size="md">
-          Show more products
-        </Button>
-      </div> */}
     </AppShell>
   );
 }
