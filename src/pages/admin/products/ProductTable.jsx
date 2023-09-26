@@ -8,8 +8,11 @@ import {
   useMantineTheme,
   Badge,
   Button,
+  Autocomplete,
+  rem,
+  Pagination,
 } from "@mantine/core";
-import { IconPencil, IconTrash } from "@tabler/icons-react";
+import { IconPencil, IconSearch, IconTrash } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../../config/supabase";
@@ -22,6 +25,9 @@ export default function ProductsTable({}) {
   const [activePage, setPage] = useState(1);
   const navigate = useNavigate();
   const { productId } = useParams();
+  const [value, setValue] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [count, setCount] = useState(0);
 
   const handleCreateProduct = () => {
     navigate("/admin/create");
@@ -34,6 +40,12 @@ export default function ProductsTable({}) {
       .from("products")
       .delete()
       .eq("id", productId);
+  };
+
+  const handleEnter = (e) => {
+    if (e.key === "Enter") {
+      setSearchQuery(value);
+    }
   };
 
   // delete modal
@@ -55,10 +67,18 @@ export default function ProductsTable({}) {
     });
 
   //
+  const pageSize = 5;
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data, error } = await supabase.from("products").select();
+      const range = activePage ? activePage - 1 : 0;
+      const offSet = range * pageSize;
+      const { data, error, count } = await supabase
+        .from("products")
+        .select("*", { count: "exact" })
+        .ilike("title", `%${searchQuery}%`)
+        .range(offSet, offSet * pageSize)
+        .limit(5);
 
       if (error) {
         setError("Ne fetcham");
@@ -67,12 +87,22 @@ export default function ProductsTable({}) {
       }
       if (data) {
         setProducts(data);
+        setCount(count);
+        console.log(count);
         console.log(data);
       }
     };
     fetchData();
-  }, []);
+  }, [activePage, searchQuery]);
 
+  const largeData = products?.map((product) => product.title);
+  console.log(largeData);
+  console.log(products);
+
+  // const filteredProducts = products?.filter((product) =>
+  //   product.title.toLowerCase().includes(value.toLowerCase())
+  // );
+  console.log(value);
   const allProducts = products?.map((product) => (
     <tr key={product.id}>
       <td>
@@ -134,6 +164,14 @@ export default function ProductsTable({}) {
       <div>
         <Button onClick={handleCreateProduct}>Add new product</Button>
       </div>
+      <Autocomplete
+        placeholder="Search"
+        data={largeData ?? []}
+        value={value}
+        onChange={setValue}
+        onKeyDown={(e) => handleEnter(e)}
+      />
+
       <Table sx={{ minWidth: 800 }} verticalSpacing="sm">
         <thead>
           <tr>
@@ -145,6 +183,13 @@ export default function ProductsTable({}) {
         </thead>
         <tbody>{allProducts}</tbody>
       </Table>
+      <Pagination
+        value={activePage}
+        onChange={setPage}
+        total={Math.ceil(count / 5)}
+        color="teal"
+        radius="md"
+      />
     </ScrollArea>
   );
 }
