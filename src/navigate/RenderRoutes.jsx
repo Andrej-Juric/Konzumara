@@ -7,6 +7,7 @@ import AdminPage from "../pages/admin/AdminPage";
 import AdminProduct from "../pages/admin/products/AdminProduct";
 import Categories from "../pages/admin/categories/Categories";
 import Orders from "../pages/admin/orders/Orders";
+import CreateCategories from "../pages/admin/categories/create-categories/CreateCategories";
 
 export default function RenderRoutes() {
   return (
@@ -20,6 +21,7 @@ export default function RenderRoutes() {
           <Route path="edit/:productId" element={<EditProduct />} />
           <Route path="categories" element={<Categories />} />
           <Route path="orders" element={<Orders />} />
+          <Route path="createcategories" element={<CreateCategories />} />
         </Route>
       </Routes>
     </BrowserRouter>

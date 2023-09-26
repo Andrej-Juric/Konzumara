@@ -42,6 +42,7 @@ export default function CreateProduct() {
 
   return (
     <Box maw={340} mx="auto">
+      <h1>Add new product</h1>
       <form onSubmit={handleSubmit}>
         <TextInput
           label="Title"
