@@ -17,20 +17,9 @@ import { ModalsProvider } from "@mantine/modals";
 export default function AdminPage() {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
-  const { user, signIn, signOut, signUp } = useContext(AuthContext);
+  const { signOut } = useContext(AuthContext);
 
   const navigate = useNavigate();
-  const handleUserScreen = () => {
-    navigate("/");
-  };
-
-  const handleProducts = () => {
-    navigate("/admin");
-  };
-
-  const handleCategories = () => {
-    navigate("/admin/categories");
-  };
 
   return (
     <ModalsProvider labels={{ confirm: "Submit", cancel: "Cancel" }}>
@@ -53,7 +42,7 @@ export default function AdminPage() {
             width={{ sm: 200, lg: 300 }}
           >
             <Button
-              onClick={handleProducts}
+              onClick={() => navigate("/admin")}
               color="orange"
               radius="md"
               style={{ marginTop: "10px" }}
@@ -61,7 +50,7 @@ export default function AdminPage() {
               Products
             </Button>
             <Button
-              onClick={handleCategories}
+              onClick={() => navigate("/admin/categories")}
               color="orange"
               radius="md"
               style={{ marginTop: "10px" }}
@@ -99,7 +88,7 @@ export default function AdminPage() {
               </MediaQuery>
 
               <Text>Admin page</Text>
-              <Button onClick={handleUserScreen}>Home</Button>
+              <Button onClick={() => navigate("/")}>Home</Button>
               <Button onClick={signOut}>Log Out</Button>
             </div>
           </Header>

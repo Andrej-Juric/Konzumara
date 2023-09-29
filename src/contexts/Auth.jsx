@@ -1,4 +1,4 @@
-import { createContext, useEffect, useMemo, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { supabase } from "../config/supabase";
 
 export const AuthContext = createContext();
@@ -58,7 +58,7 @@ export default function Auth({ children }) {
     supabase.auth.getSession().then(({ data }) => {
       if (data && data.session) {
         setUser(data.session.user);
-        console.log(data.session.user);
+        // console.log(data.session.user);
         setIsLoading(false);
       } else {
         setIsLoading(false);

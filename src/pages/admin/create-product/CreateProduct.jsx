@@ -14,16 +14,21 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../contexts/Auth";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../../config/supabase";
+
 export default function CreateProduct() {
   const { user } = useContext(AuthContext);
   const [categories, setCategories] = useState([]);
   const [file, setFile] = useState(null);
   const [error, setError] = useState(null);
-  // console.log(categories.name);
 
   const navigate = useNavigate();
   const handleCancel = () => {
     navigate("/admin");
+  };
+
+  const clearFile = () => {
+    setFile(null);
+    // resetRef.current?.();
   };
 
   const form = useForm({
@@ -50,44 +55,40 @@ export default function CreateProduct() {
   const handleSubmit = (e) => {
     e.preventDefault();
   };
-  console.log(form.values);
+  // console.log(form.values);
 
   const addProduct = async () => {
     const productData = { ...form.values };
     delete productData.category_id;
     delete productData.product_id;
 
-    const { data, error } = await supabase
+    const { data: product, error } = await supabase
       .from("products")
-      .insert([productData]);
+      .insert([productData])
+      .select()
+      .single();
 
     if (error) {
       console.error("greška pri dodavanju proizvoda:", error);
       return;
     }
 
-    console.log("proizvod dodan:", data);
-    // dohvaćam id
-    // const productId = data[0].id;
+    console.log("proizvod dodan:", product);
 
-    // spremam product id
-  };
-  // console.log(data, productDataResponse);
-  // console.log(product_id);
-  // console.log(form.values);
-  const addCategories = async () => {
-    const product_id = form.values.product_id;
-    console.log(product_id);
-    form.setValues({
-      ...form.values,
-      product_id: data[0].id,
-    });
-    const category_id = form.values.category_id;
-    console.log("slanje zahtjeva");
-    const { data, error } = await supabase
+    const { category_id } = form.values;
+
+    await supabase
       .from("product_categories")
-      .insert([{ category_id, product_id }]);
-    console.log("odgovor na reg:", data, error);
+      .insert([{ category_id, product_id: product.id }]);
+
+    // add image
+    // const uploadsFile = e.target.file[0];
+    await supabase.storage
+      .from("uploads")
+      .upload("public/uploads/user.id", uploadsFile, {
+        cacheControl: "3600",
+        upsert: false,
+      });
   };
 
   // fetch categories
@@ -111,19 +112,30 @@ export default function CreateProduct() {
     fetchCategories();
   }, []);
 
-  const handleUploadImage = async (file) => {
-    const url = await uploadFile({
-      file,
-      storageName: `uploads/${user.id}`,
-    });
-    form.setFieldValue("image", url);
-  };
+  // const handleUploadImage = async (file) => {
+  //   const url = await uploadFile({
+  //     file,
+  //     storageName: `uploads/${user.id}`,
+  //   });
+  //   form.setFieldValue("image", url);
+  // };
+
+  // const uploadsFile = e.target.files[0];
+  // const addImage = async () => {
+
+  // };
 
   const addProductAndCategories = () => {
     addProduct();
-    addCategories();
-    handleUploadImage();
+
+    // handleUploadImage();
   };
+
+  const mappedCategories =
+    categories.map((category) => ({
+      value: category.id,
+      label: category.name,
+    })) ?? [];
 
   return (
     <Box maw={340} mx="auto">
@@ -143,12 +155,7 @@ export default function CreateProduct() {
         <Select
           label="Categories"
           placeholder="Pick category"
-          data={
-            categories.map((category) => ({
-              value: category.id,
-              label: category.name,
-            })) ?? []
-          }
+          data={mappedCategories}
           {...form.getInputProps("category_id")}
         />
 
@@ -167,6 +174,9 @@ export default function CreateProduct() {
           <FileButton onChange={setFile} accept="image/png,image/jpeg">
             {(props) => <Button {...props}>Upload image</Button>}
           </FileButton>
+          <Button disabled={!file} color="red" onClick={clearFile}>
+            Reset image
+          </Button>
         </Group>
 
         {file && (

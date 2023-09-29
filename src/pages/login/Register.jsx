@@ -1,9 +1,7 @@
 import { useToggle, upperFirst } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
-import Auth from "../../contexts/Auth";
 import { AuthContext } from "../../contexts/Auth";
 
-import * as yup from "yup";
 import {
   TextInput,
   PasswordInput,
@@ -16,31 +14,15 @@ import {
   Anchor,
   Stack,
 } from "@mantine/core";
-import { useContext, useState } from "react";
-import UserScreen from "../home/Home";
+import { useContext } from "react";
+
 import { useNavigate } from "react-router-dom";
+import { registrationSchema } from "../../schema/registration";
 
 export default function Register() {
   const [type, toggle] = useToggle(["login", "register"]);
   const { user, signIn, signOut, signUp } = useContext(AuthContext);
   const navigate = useNavigate();
-
-  const registrationSchema = yup.object().shape({
-    email: yup.string().email().required(),
-    full_name: type === "register" ? yup.string().required() : yup.string(),
-
-    password: yup
-      .string()
-      .min(6)
-      .required()
-      .oneOf([yup.ref("confirmPassword"), null], "Passwords must match"),
-    confirmPassword: yup
-      .string()
-      .min(6)
-      .required()
-      .oneOf([yup.ref("password"), null], "Passwords must match"),
-    is_admin: yup.boolean(),
-  });
 
   const form = useForm({
     initialValues: {
@@ -50,8 +32,29 @@ export default function Register() {
       confirmPassword: "",
       is_admin: true,
     },
-    validationSchema: registrationSchema,
+    validationSchema: registrationSchema(type),
   });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (type === "register") {
+        await signUp(
+          form.values.email,
+          form.values.password,
+          form.values.full_name,
+
+          form.values.is_admin
+        );
+        navigate("/");
+      } else {
+        await signIn(form.values.email, form.values.password);
+        navigate("/");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <AuthContext.Provider value={{ user, signIn, signOut, signUp }}>
@@ -70,28 +73,7 @@ export default function Register() {
 
               <Divider labelPosition="center" my="lg" />
 
-              <form
-                onSubmit={async (e) => {
-                  e.preventDefault();
-                  try {
-                    if (type === "register") {
-                      await signUp(
-                        form.values.email,
-                        form.values.password,
-                        form.values.full_name,
-                        // form.values.confirmPassword,
-                        form.values.is_admin
-                      );
-                      navigate("/homepage");
-                    } else {
-                      await signIn(form.values.email, form.values.password);
-                      navigate("/homepage");
-                    }
-                  } catch (error) {
-                    console.error(error);
-                  }
-                }}
-              >
+              <form onSubmit={handleSubmit}>
                 <Stack>
                   {type === "register" && (
                     <TextInput

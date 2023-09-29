@@ -1,6 +1,6 @@
 import { MantineProvider } from "@mantine/core";
 import "./App.css";
-import RenderRoutes from "./navigate/RenderRoutes";
+import RenderRoutes from "./navigation/RenderRoutes";
 import { ModalsProvider } from "@mantine/modals";
 
 export default function App() {

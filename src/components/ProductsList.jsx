@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../../config/supabase";
+import { supabase } from "../config/supabase";
 import { Button, Grid, Select } from "@mantine/core";
-import { FeaturesCard } from "../home/FeaturesCard";
-export default function SupaProducts({}) {
-  const [products, setProducts] = useState(null);
+import { ProductCard } from "./ProductCard/Index";
+
+export default function ProductsList({}) {
+  const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
   const [optionSelected, setOptionSelected] = useState("");
   const [productRange, setProductRange] = useState(7);
@@ -27,22 +28,12 @@ export default function SupaProducts({}) {
       query = query.order("created_at", { ascending: false });
     }
 
-    // const { data, error } = await supabase
-    //   .from("products")
-    //   .select()
-    //   .range(0, productRange)
-    //   .order(orderBy, { ascending: orderAscending });
-
     const { data, error } = await query;
 
-    if (error) {
-      setError("Ne fetcham");
-      setProducts(null);
-      console.log(error);
-    }
     if (data) {
       setProducts(data);
-      console.log(data);
+      // console.log(data);
+      // console.log(data[0].id);
     }
   };
   useEffect(() => {
@@ -54,7 +45,7 @@ export default function SupaProducts({}) {
       setProductRange(productRange + 8);
     }
   };
-  console.log(optionSelected);
+  // console.log(optionSelected);
   return (
     <div>
       {error ? (
@@ -83,7 +74,7 @@ export default function SupaProducts({}) {
             {products &&
               products.map((product) => (
                 <Grid.Col key={product.id} sm={6} md={4} lg={3}>
-                  <FeaturesCard product={product} />
+                  <ProductCard product={product} />
                 </Grid.Col>
               ))}
           </Grid>
